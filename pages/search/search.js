@@ -83,7 +83,6 @@ Page({
         desc: '1-2天，打卡城市文艺地标，感受街头巷尾的人间烟火。',
         cover: 'https://picsum.photos/400/300?random=12',
         duration: '1-2天',
-        price: 0,
         match: 88,
         tags: ['城市', '文艺', '免费']
       },
@@ -93,7 +92,6 @@ Page({
         desc: '2天1晚，中国四大奇观之一，清晨雾凇如诗如画。',
         cover: 'https://picsum.photos/400/300?random=13',
         duration: '2天1晚',
-        price: 499,
         match: 92,
         tags: ['摄影', '自然', '冬季']
       },
@@ -103,7 +101,6 @@ Page({
         desc: '1天，体验千年渔猎文化，见证冰湖腾鱼的壮观场面。',
         cover: 'https://picsum.photos/400/300?random=14',
         duration: '1天',
-        price: 299,
         match: 85,
         tags: ['文化', '体验', '冬季']
       }

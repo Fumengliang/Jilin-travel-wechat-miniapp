@@ -38,35 +38,50 @@ Page({
     })
   },
 
+  // ✅ 真·推迟一天（时间+1小时，视觉生效）
   postponeDay(e) {
     const { iti, day } = e.currentTarget.dataset
-    wx.showToast({ 
-      title: `Day ${day} 已推迟`, 
-      icon: 'none' 
+    let list = wx.getStorageSync('myItinerary') || []
+    const index = list.findIndex(item => item.id == iti)
+    if (index === -1) return
+
+    const dayIndex = list[index].schedule.findIndex(d => d.dayNum == day)
+    if (dayIndex === -1) return
+
+    list[index].schedule[dayIndex].nodes.forEach(node => {
+      let [h, m] = node.time.split(':')
+      h = (Number(h) + 1) % 24
+      node.time = h.toString().padStart(2, '0') + ':' + m
     })
-    // 实际应更新数据并触发AI重规划
-    this.simulateAIReplan(iti)
+
+    wx.setStorageSync('myItinerary', list)
+    this.setData({ itinerary: list })
+    wx.showToast({ title: `Day ${day} 已推迟1小时`, icon: 'success' })
   },
 
+  // ✅ 真·跳过（置灰 + 文字标记）
   skipDay(e) {
     const { iti, day } = e.currentTarget.dataset
-    wx.showToast({ 
-      title: `Day ${day} 已跳过`, 
-      icon: 'none' 
-    })
-    this.simulateAIReplan(iti)
+    let list = wx.getStorageSync('myItinerary') || []
+    const index = list.findIndex(item => item.id == iti)
+    if (index === -1) return
+
+    const dayIndex = list[index].schedule.findIndex(d => d.dayNum == day)
+    if (dayIndex === -1) return
+
+    list[index].schedule[dayIndex].status = 'skipped'
+    list[index].schedule[dayIndex].title = '[已跳过] ' + list[index].schedule[dayIndex].title
+
+    wx.setStorageSync('myItinerary', list)
+    this.setData({ itinerary: list })
+    wx.showToast({ title: `Day ${day} 已跳过`, icon: 'success' })
   },
 
-  simulateAIReplan(itiId) {
-    // 模拟AI重新规划
-    setTimeout(() => {
-      let itinerary = wx.getStorageSync('myItinerary') || []
-      const index = itinerary.findIndex(i => i.id === itiId)
-      if (index > -1) {
-        itinerary[index].hasChanges = true
-        wx.setStorageSync('myItinerary', itinerary)
-        this.setData({ itinerary })
-      }
-    }, 800)
+  // 点击标题进入详情（真）
+  goToDetail(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: '/pages/route-detail/route-detail?id=' + id
+    })
   }
 })

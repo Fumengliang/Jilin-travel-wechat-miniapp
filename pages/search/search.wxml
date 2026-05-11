@@ -45,7 +45,7 @@
           </view>
           <view class="result-footer">
             <text class="result-duration">⏱ {{item.duration}}</text>
-            <text class="result-price">{{item.price > 0 ? '¥' + item.price + '起' : '免费规划'}}</text>
+            <!-- <text class="result-price">{{item.price > 0 ? '¥' + item.price + '起' : '免费规划'}}</text> -->
           </view>
         </view>
       </view>

@@ -5,7 +5,7 @@ Page({
         id: 1,
         name: '长白山深度游',
         desc: '3天2晚，玩转冰雪秘境，沉浸式感受北国风光。天池、瀑布、温泉一网打尽。',
-        cover: 'https://picsum.photos/400/400?random=1',
+        cover: '/images/changbaishan/beijing.jpg',
         duration: '3天2晚',
         theme: '冰雪秘境'
       },
@@ -13,7 +13,7 @@ Page({
         id: 2,
         name: '延吉风情游',
         desc: '2天1晚，体验朝鲜族特色，打卡网红民俗园与早市，品尝正宗朝鲜族美食。',
-        cover: 'https://picsum.photos/400/400?random=2',
+        cover: '/images/changbaishan/senlin.jpg',
         duration: '2天1晚',
         theme: '民俗体验'
       },
@@ -21,7 +21,7 @@ Page({
         id: 3,
         name: '长春Citywalk',
         desc: '1-2天，打卡城市文艺地标，感受街头巷尾的人间烟火，探索伪满皇宫与电影城。',
-        cover: 'https://picsum.photos/400/400?random=3',
+        cover: '/images/changbaishan/town.jpg',
         duration: '1-2天',
         theme: '城市漫步'
       }

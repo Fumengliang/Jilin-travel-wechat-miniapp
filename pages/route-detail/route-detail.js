@@ -1,10 +1,11 @@
+const routes = require('../../data/routes.js');
 const app = getApp()
 
-// ====================== 火山方舟 API 配置（必须纯英文/数字，无空格）======================
-const API_KEY = "a"; 
-const API_URL = "hs";
-const MODEL_ID = "e"; 
-// ====================================================================================
+// ====================== 火山方舟 API 配置（上我寝室来拿这三个字段！）======================
+const API_KEY = "ark"; 
+const API_URL = "http";
+const MODEL_ID = "ep"; 
+// ==============================================================
 
 Page({
   data: {
@@ -22,41 +23,7 @@ Page({
   },
 
   loadRouteDetail(id) {
-    const routeData = {
-      id: 1,
-      name: "长白山深度游",
-      desc: "3天2晚，玩转冰雪秘境，沉浸式感受北国风光。天池、长白瀑布、聚龙温泉、地下森林，每一处都是大自然的鬼斧神工。",
-      images: [
-        "https://picsum.photos/400/300?random=31",
-        "https://picsum.photos/400/300?random=32",
-        "https://picsum.photos/400/300?random=33"
-      ],
-      duration: "3天2晚",
-      theme: "冰雪秘境",
-      price: 899,
-      hotels: 5,
-      foodCount: 12,
-      transport: "大巴+包车",
-      spots: 8,
-      schedule: [
-        { dayNum: 1, title: "抵达长白山 · 北坡探秘", nodes: [
-          { time: "08:00", name: "长白山北景区", desc: "乘坐环保车进入景区", skipped: false },
-          { time: "10:30", name: "天池", desc: "中国最高火山湖", skipped: false },
-          { time: "14:00", name: "长白瀑布", desc: "68米高差冰瀑", skipped: false },
-          { time: "16:30", name: "聚龙温泉", desc: "雪中泡汤", skipped: false }
-        ]},
-        { dayNum: 2, title: "西坡揽胜 · 滑雪体验", nodes: [
-          { time: "09:00", name: "长白山西坡", desc: "1442级台阶", skipped: false },
-          { time: "13:00", name: "万达滑雪场", desc: "粉雪天堂", skipped: false }
-        ]},
-        { dayNum: 3, title: "地下森林 · 返程", nodes: [
-          { time: "09:00", name: "地下森林", desc: "火山口原始森林", skipped: false },
-          { time: "12:00", name: "二道白河镇", desc: "朝鲜族美食", skipped: false }
-        ]}
-      ],
-      foods: []
-    };
-
+    const routeData = routes.find(item => item.id == id) || routes[0];
     this.setData({
       route: routeData,
       currentSchedule: JSON.parse(JSON.stringify(routeData.schedule))
@@ -80,7 +47,8 @@ Page({
         schedule.forEach(day => {
           day.nodes.forEach(n => {
             let [hh, mm] = n.time.split(":");
-            hh = (parseInt(hh) + h) % 24;
+            hh = parseInt(hh) + h;
+            hh = hh % 24;
             n.time = hh.toString().padStart(2, "0") + ":" + mm;
           });
         });
@@ -102,69 +70,126 @@ Page({
   },
 
   async sendMessage() {
-    const { userInput, messages } = this.data;
+    const userInput = this.data.userInput || "";
+    const oldMessages = this.data.messages || [];
+
     if (!userInput.trim()) return;
 
-    const newMsg = [...messages, { role: "user", content: userInput }];
+    const tempMessages = JSON.parse(JSON.stringify(oldMessages));
+    tempMessages.push({
+      role: "user",
+      content: userInput.trim()
+    });
+
     this.setData({
-      messages: newMsg,
+      messages: tempMessages,
       userInput: "",
       isAIThinking: true
     });
 
     try {
-      const aiRaw = await this.callAI(newMsg);
-      const jsonStart = aiRaw.indexOf("{");
-      const jsonEnd = aiRaw.lastIndexOf("}") + 1;
-      const jsonStr = aiRaw.slice(jsonStart, jsonEnd);
-      const aiRes = JSON.parse(jsonStr);
+      const aiRaw = await this.callAI(tempMessages);
+      let aiRes;
+      try {
+        aiRes = JSON.parse(aiRaw);
+      } catch (e) {
+        aiRes = { reply: "收到，我帮你调整行程～" };
+      }
 
-      this.setData({
-        messages: [...newMsg, { role: "assistant", content: aiRes.reply }]
+      const finalMessages = JSON.parse(JSON.stringify(tempMessages));
+      finalMessages.push({
+        role: "assistant",
+        content: aiRes.reply || "好的～"
       });
 
-      if (aiRes.commands) this.executePlanChange(aiRes.commands);
+      this.setData({
+        messages: finalMessages,
+        isAIThinking: false
+      });
+
+      if (aiRes.commands) {
+        this.executePlanChange(aiRes.commands);
+      }
+
     } catch (e) {
-      console.error("AI错误：", e);
-      this.setData({
-        messages: [...newMsg, { role: "assistant", content: "已为你调整行程～" }]
+      const finalMessages = JSON.parse(JSON.stringify(tempMessages));
+      finalMessages.push({
+        role: "assistant",
+        content: "网络有点波动，你再发一次就行～"
       });
-    } finally {
-      this.setData({ isAIThinking: false });
+      this.setData({
+        messages: finalMessages,
+        isAIThinking: false
+      });
     }
+
+    // --------------------------
+    // ✅ 修复：滚动放到正确位置
+    // --------------------------
+    setTimeout(() => {
+      wx.createSelectorQuery().select('.ai-messages').node((res) => {
+        if (res.node) {
+          res.node.scrollTop = 99999;
+        }
+      }).exec();
+    }, 300);
   },
 
   callAI(messageHistory) {
+    const route = this.data.route;
+    const currentSchedule = this.data.currentSchedule;
+
+    const routeIdentity = `当前路线ID：${route.id}，路线名称：${route.name}`;
+
+    let scheduleText = "当日行程：\n";
+    currentSchedule.forEach(day => {
+      scheduleText += `第${day.dayNum}天：`;
+      day.nodes.forEach(item => {
+        scheduleText += `${item.time} ${item.name}；`;
+      });
+      scheduleText += "\n";
+    });
+
+    const systemPrompt = `
+你是专属行程调整助手，只输出严格JSON，不要多余解释、不要废话。
+${routeIdentity}
+${scheduleText}
+
+支持三种指令：
+1. skip：跳过指定景点
+2. delay：给指定景点往后推迟N小时，必须精确计算，如09:00推迟1小时=10:00，不能乱改时间
+3. replace：把原有景点替换成新景点
+
+固定输出格式：
+{"reply":"简短口语回复","commands":[{"action":"skip/delay/replace","target":"景点名","hours":"数字","from":"原景点","to":"替换景点"}]}
+仅输出JSON，无其他文字。
+    `.trim();
+
     return new Promise((resolve, reject) => {
       wx.request({
         url: API_URL,
         method: "POST",
         header: {
           "Content-Type": "application/json",
-          // 关键：确保 Authorization 头是纯 ASCII，无中文/空格
-          "Authorization": "Bearer " + API_KEY
+          "Authorization": `Bearer ${API_KEY}`
         },
         data: {
           model: MODEL_ID,
           messages: [
-            {
-              role: "system",
-              content: "你是行程调整AI，必须严格返回JSON。当前日程：Day1：08:00长白山北景区，10:30天池，14:00长白瀑布，16:30聚龙温泉；Day2：09:00长白山西坡，13:00万达滑雪场；Day3：09:00地下森林，12:00二道白河镇。输出格式：{\"reply\":\"你的回复\",\"commands\":[{\"action\":\"skip/delay/replace\",\"target\":\"景点名\",\"hours\":\"数字\",\"from\":\"旧景点\",\"to\":\"新景点\"}]}"
-            },
+            { role: "system", content: systemPrompt },
             ...messageHistory
           ],
-          temperature: 0.1,
+          temperature: 0.05,
           max_tokens: 1024
         },
         success: res => {
-          console.log("API响应:", res);
           if (res.statusCode === 200 && res.data?.choices?.[0]?.message) {
-            resolve(res.data.choices[0].message.content);
+            resolve(res.data.choices[0].message.content.trim());
           } else {
-            reject(new Error("API错误: " + JSON.stringify(res)));
+            reject("AI返回格式异常");
           }
         },
-        fail: err => reject(new Error("网络错误: " + err.errMsg))
+        fail: err => reject(err)
       });
     });
   },
@@ -177,25 +202,32 @@ Page({
     this.setData({ userInput: e.detail.value });
   },
 
-  showHotels() {
-    wx.showModal({ title: "酒店", content: "万达度假村、温泉酒店、民宿等" });
-  },
-
-  showFoods() {
-    wx.showModal({ title: "美食", content: "朝鲜族冷面、人参鸡、温泉蛋" });
-  },
-
-  showTransport() {
-    wx.showModal({ title: "交通", content: "大巴+包车" });
-  },
-
-  showSpots() {
-    wx.showModal({ title: "景点", content: "天池、长白瀑布、温泉、滑雪场" });
-  },
-
+  showHotels() { wx.showModal({ title: "酒店", content: "万达、温泉酒店、民宿" }) },
+  showFoods() { wx.showModal({ title: "美食", content: "冷面、人参鸡、温泉蛋" }) },
+  showTransport() { wx.showModal({ title: "交通", content: "大巴+包车" }) },
+  showSpots() { wx.showModal({ title: "景点", content: "天池、瀑布、温泉、滑雪" }) },
   addToItinerary() {
-    wx.showToast({ title: "已加入行程", icon: "success" });
+    // 拿到当前路线
+    const currentRoute = this.data.route;
+  
+    // 从本地拿已保存的行程
+    let savedList = wx.getStorageSync('myItinerary') || [];
+  
+    // 防重复添加
+    const exists = savedList.some(item => item.id === currentRoute.id);
+    if (exists) {
+      wx.showToast({ title: "已经在行程里啦", icon: "none" });
+      return;
+    }
+  
+    // 加入
+    savedList.push(currentRoute);
+  
+    // 存回本地
+    wx.setStorageSync('myItinerary', savedList);
+  
+    // 提示成功
+    wx.showToast({ title: "已加入我的行程", icon: "success" });
   },
-
-  applyAction() {}
+  applyAction() { }
 });

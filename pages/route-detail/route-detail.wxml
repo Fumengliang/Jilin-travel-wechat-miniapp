@@ -51,13 +51,13 @@
   <view class="card">
     <view class="section-title">📅 行程安排</view>
     <view class="timeline">
-      <view class="timeline-day" wx:for="{{route.schedule}}" wx:for-item="day" wx:key="dayNum">
+      <view class="timeline-day" wx:for="{{currentSchedule}}" wx:for-item="day" wx:key="dayNum">
         <view class="day-header">
           <view class="day-badge">Day {{day.dayNum}}</view>
           <text class="day-title">{{day.title}}</text>
         </view>
         <view class="day-nodes">
-          <view class="node {{node.skipped ? 'skipped' : ''}} {{node.postponed ? 'postponed' : ''}}" wx:for="{{day.nodes}}" wx:for-item="node" wx:key="time">
+          <view class="node {{node.skipped ? 'skipped' : ''}}" wx:for="{{day.nodes}}" wx:for-item="node" wx:key="time">
             <view class="node-time">{{node.time}}</view>
             <view class="node-content">
               <view class="node-line"></view>
@@ -67,11 +67,10 @@
                   <view class="node-name-row">
                     <text class="node-name">{{node.name}}</text>
                     <text class="node-status" wx:if="{{node.skipped}}">[已跳过]</text>
-                    <text class="node-status postponed" wx:if="{{node.postponed}}">[已推迟]</text>
                   </view>
                   <text class="node-desc">{{node.desc}}</text>
                   <view class="node-tags">
-                    <text class="tag" wx:for="{{node.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+                    <text class="tag" wx:for="{{node.tags}}" wx:key="*this">{{tag}}</text>
                   </view>
                 </view>
               </view>
@@ -84,66 +83,66 @@
 
   <!-- 底部操作栏 -->
   <view class="detail-footer safe-bottom">
-    <view class="footer-price">
+    <!-- <view class="footer-price">
       <text class="price-label">参考预算</text>
       <text class="price-num">{{route.price > 0 ? '¥' + route.price : '免费'}}</text>
-    </view>
+    </view> -->
     <button class="btn-primary footer-btn" bindtap="addToItinerary">
       <text>📋 加入我的行程</text>
     </button>
   </view>
 
-  <!-- AI 对话悬浮球 -->
+  <!-- AI 悬浮球 -->
   <view class="ai-float-btn {{aiPanelOpen ? 'active' : ''}}" bindtap="toggleAIPanel">
     <text class="ai-float-icon">🤖</text>
     <text class="ai-float-text" wx:if="{{!aiPanelOpen}}">AI助手</text>
   </view>
 
-  <!-- AI 对话面板 -->
-  <view class="ai-panel {{aiPanelOpen ? 'open' : ''}}">
-    <view class="ai-panel-header">
-      <view class="ai-panel-title">
+  <!-- ==========================
+       🔥 彻底修复版 AI 面板
+       输入框固定死！聊天区高度固定死！
+       ========================== -->
+  <view class="ai-panel {{aiPanelOpen ? 'open' : ''}}" style="position:fixed;bottom:0;left:0;right:0;height:85%;background:#fff;border-top-left-radius:20rpx;border-top-right-radius:20rpx;z-index:999;">
+    
+    <!-- 头部 -->
+    <view class="ai-panel-header" style="padding:20rpx;border-bottom:1rpx solid #eee;">
+      <view class="ai-panel-title" style="display:flex;align-items:center;gap:16rpx;">
         <text class="ai-avatar">🤖</text>
-        <view class="ai-title-text">
-          <text>行程AI助手</text>
-          <text class="ai-subtitle">输入需求，智能调整行程</text>
+        <view>
+          <text style="font-size:32rpx;font-weight:bold;">行程AI助手</text>
+          <text style="font-size:24rpx;color:#999;display:block;">实时调整你的行程</text>
         </view>
       </view>
-      <text class="ai-close" bindtap="toggleAIPanel">✕</text>
+      <text class="ai-close" bindtap="toggleAIPanel" style="position:absolute;right:24rpx;top:24rpx;font-size:36rpx;">✕</text>
     </view>
 
-    <scroll-view class="ai-messages" scroll-y scroll-into-view="msg-{{messages.length-1}}">
-      <view class="ai-message system" id="msg-0">
-        <view class="msg-bubble">
-          <text>你好！我是你的行程AI助手。你可以这样告诉我：
-• "计划推迟一个小时"
-• "我不想去天池"
-• "增加一个温泉景点"
-• "把Day2的滑雪改成观光"
-
-我会实时帮你调整行程方案！</text>
+    <!-- ✅ 聊天区域：写死高度 420px → 绝对能滑动、能看见！ -->
+    <scroll-view class="ai-messages" scroll-y style="height:420px;padding:20rpx;">
+      <view class="ai-message system">
+        <view class="msg-bubble" style="background:#f5f5f5;padding:20rpx;border-radius:16rpx;">
+          <text style="font-size:28rpx;">你好！我是你的行程AI助手。
+• "推迟1小时"
+• "我不想去XX景点"
+• "把A换成B"
+我会实时帮你调整行程！</text>
         </view>
       </view>
-      <view class="ai-message {{item.role}}" wx:for="{{messages}}" wx:key="index" id="msg-{{index+1}}">
+
+      <view class="ai-message {{item.role}}" style="display:flex;align-items:flex-start;margin:16rpx 0;" wx:for="{{messages}}" wx:key="index">
         <view class="msg-avatar" wx:if="{{item.role === 'assistant'}}">🤖</view>
-        <view class="msg-bubble">
-          <text>{{item.content}}</text>
-          <view class="msg-actions" wx:if="{{item.actions}}">
-            <button class="action-btn" size="mini" wx:for="{{item.actions}}" wx:for-item="act" wx:key="*this" bindtap="applyAction" data-action="{{act}}">
-              {{act.label}}
-            </button>
-          </view>
+        <view class="msg-bubble" style="background:#007aff;color:#fff;padding:20rpx;border-radius:16rpx;max-width:70%;">
+          <text style="font-size:28rpx;">{{item.content}}</text>
         </view>
         <view class="msg-avatar" wx:if="{{item.role === 'user'}}">👤</view>
       </view>
-      <view class="ai-thinking" wx:if="{{isAIThinking}}">
-        <text class="thinking-dot">●</text>
-        <text class="thinking-dot">●</text>
-        <text class="thinking-dot">●</text>
+
+      <view class="ai-thinking" wx:if="{{isAIThinking}}" style="padding:10rpx;font-size:24rpx;color:#999;">
+        <text>思考中</text>
       </view>
     </scroll-view>
 
-    <view class="ai-input-area">
+    <!-- ✅ 输入框：固定死在底部，不会跑、不会盖消息 -->
+    <view class="ai-input-area" style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;padding:20rpx;background:#fff;border-top:1rpx solid #eee;">
       <input 
         class="ai-input" 
         placeholder="输入你的需求..."
@@ -151,13 +150,13 @@
         bindinput="onInputChange"
         confirm-type="send"
         bindconfirm="sendMessage"
+        style="flex:1;height:80rpx;padding:0 20rpx;background:#f5f5f5;border-radius:40rpx;font-size:28rpx;"
       />
-      <button class="ai-send-btn {{userInput ? 'active' : ''}}" bindtap="sendMessage">
-        <text>发送</text>
+      <button class="ai-send-btn" bindtap="sendMessage" style="margin-left:16rpx;height:80rpx;padding:0 30rpx;background:#007aff;color:#fff;border-radius:40rpx;font-size:28rpx;">
+        发送
       </button>
     </view>
   </view>
 
-  <!-- 遮罩层 -->
-  <view class="ai-overlay {{aiPanelOpen ? 'show' : ''}}" bindtap="toggleAIPanel"></view>
+  <view class="ai-overlay {{aiPanelOpen ? 'show' : ''}}" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:998;" bindtap="toggleAIPanel"></view>
 </view>
