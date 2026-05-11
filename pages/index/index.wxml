@@ -1,0 +1,123 @@
+<view class="index-container">
+  <!-- 顶部横幅 -->
+  <view class="hero-section">
+    <view class="hero-bg">
+      <view class="hero-content">
+        <text class="hero-title">吉林私旅管家</text>
+        <text class="hero-subtitle">免费智能旅行规划平台</text>
+        <text class="hero-slogan">你的旅行，你来定</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索入口 -->
+  <view class="search-bar" bindtap="goToSearch">
+    <view class="search-input">
+      <text class="search-icon">🔍</text>
+      <text class="search-placeholder">输入目的地，AI为你规划专属旅程</text>
+    </view>
+  </view>
+
+  <!-- 五大核心功能 -->
+  <view class="card features-card">
+    <view class="section-title">五大核心功能</view>
+    <view class="features-grid">
+      <view class="feature-item" bindtap="goToPage" data-page="search">
+        <view class="feature-icon" style="background: linear-gradient(135deg, #1a5f2a, #2d8a3e);">🔍</view>
+        <text class="feature-name">随心搜</text>
+        <text class="feature-desc">智能推荐</text>
+      </view>
+      <view class="feature-item" bindtap="goToPage" data-page="routes">
+        <view class="feature-icon" style="background: linear-gradient(135deg, #e8b923, #f0d060);">🗺️</view>
+        <text class="feature-name">照着玩</text>
+        <text class="feature-desc">精品路线</text>
+      </view>
+      <view class="feature-item" bindtap="goToPage" data-page="itinerary">
+        <view class="feature-icon" style="background: linear-gradient(135deg, #07c160, #2ee88f);">⚡</view>
+        <text class="feature-name">动态调</text>
+        <text class="feature-desc">自由随心</text>
+      </view>
+      <view class="feature-item" bindtap="goToPage" data-page="blindbox">
+        <view class="feature-icon" style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e);">🎁</view>
+        <text class="feature-name">惊喜盒</text>
+        <text class="feature-desc">低价好物</text>
+      </view>
+      <view class="feature-item" bindtap="goToPage" data-page="transparency">
+        <view class="feature-icon" style="background: linear-gradient(135deg, #4a90d9, #6bb3ff);">🛡️</view>
+        <text class="feature-name">透明保</text>
+        <text class="feature-desc">明码标价</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 精品路线推荐 -->
+  <view class="card">
+    <view class="section-header">
+      <view class="section-title">🔥 热门精品路线</view>
+      <text class="more-link" bindtap="goToPage" data-page="routes">查看更多 ></text>
+    </view>
+    <view class="route-list">
+      <view class="route-item" wx:for="{{hotRoutes}}" wx:key="id" bindtap="goRouteDetail" data-id="{{item.id}}">
+        <image class="route-img img-round" src="{{item.cover}}" mode="aspectFill" lazy-load/>
+        <view class="route-info">
+          <text class="route-name">{{item.name}}</text>
+          <text class="route-desc ellipsis-2">{{item.desc}}</text>
+          <view class="route-meta">
+            <text class="tag">{{item.duration}}</text>
+            <text class="tag tag-accent">{{item.theme}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 痛点数据展示 -->
+  <view class="card stats-card">
+    <view class="section-title">📊 年轻人旅行痛点</view>
+    <view class="stats-list">
+      <view class="stat-item">
+        <view class="stat-bar">
+          <view class="stat-fill" style="width: 66.37%; background: #ff6b6b;"></view>
+        </view>
+        <view class="stat-text">
+          <text>担心被宰客</text>
+          <text class="stat-num">66.37%</text>
+        </view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-bar">
+          <view class="stat-fill" style="width: 65.49%; background: #ff8e53;"></view>
+        </view>
+        <view class="stat-text">
+          <text>担心隐性消费</text>
+          <text class="stat-num">65.49%</text>
+        </view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-bar">
+          <view class="stat-fill" style="width: 63.72%; background: #e8b923;"></view>
+        </view>
+        <view class="stat-text">
+          <text>担心宣传不真实</text>
+          <text class="stat-num">63.72%</text>
+        </view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-bar">
+          <view class="stat-fill" style="width: 48.67%; background: #4a90d9;"></view>
+        </view>
+        <view class="stat-text">
+          <text>行程规划太繁琐</text>
+          <text class="stat-num">48.67%</text>
+        </view>
+      </view>
+    </view>
+    <view class="stats-source">数据来源：113份有效问卷（18-25岁占比79.65%）</view>
+  </view>
+
+  <!-- 底部标语 -->
+  <view class="footer-slogan">
+    <text>年轻人不是不喜欢吉林，</text>
+    <text>只是不知道怎么轻松地喜欢上吉林。</text>
+  </view>
+</view>

@@ -1,0 +1,80 @@
+<view class="search-container">
+  <!-- 搜索框 -->
+  <view class="search-header">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="输入目的地，如：长白山、延吉、长春..."
+        value="{{keyword}}"
+        bindinput="onInput"
+        confirm-type="search"
+        bindconfirm="doSearch"
+        focus
+      />
+      <text class="clear-btn" wx:if="{{keyword}}" bindtap="clearInput">✕</text>
+    </view>
+    <text class="cancel-btn" bindtap="goBack">取消</text>
+  </view>
+
+  <!-- AI推荐状态 -->
+  <view class="ai-thinking" wx:if="{{isSearching}}">
+    <view class="ai-avatar">🤖</view>
+    <view class="ai-text">
+      <text>AI 正在分析您的需求...</text>
+      <text class="ai-sub">基于大数据为您匹配最优方案</text>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{hasSearched && results.length > 0}}">
+    <view class="result-header">
+      <text class="result-title">🎯 为您推荐 {{results.length}} 个方案</text>
+    </view>
+    <view class="result-list">
+      <view class="result-card" wx:for="{{results}}" wx:key="id" bindtap="goRouteDetail" data-id="{{item.id}}">
+        <image class="result-img img-round" src="{{item.cover}}" mode="aspectFill" lazy-load/>
+        <view class="result-info">
+          <view class="result-name-row">
+            <text class="result-name">{{item.name}}</text>
+            <text class="match-score">匹配度 {{item.match}}%</text>
+          </view>
+          <text class="result-desc ellipsis-2">{{item.desc}}</text>
+          <view class="result-tags">
+            <text class="tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+          </view>
+          <view class="result-footer">
+            <text class="result-duration">⏱ {{item.duration}}</text>
+            <text class="result-price">{{item.price > 0 ? '¥' + item.price + '起' : '免费规划'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无结果 -->
+  <view class="empty-state" wx:if="{{hasSearched && results.length === 0}}">
+    <text class="empty-icon">😕</text>
+    <text class="empty-text">暂未找到相关结果</text>
+    <text class="empty-sub">试试搜索：长白山、延吉、长春、雾凇岛</text>
+  </view>
+
+  <!-- 热门搜索 -->
+  <view class="hot-search" wx:if="{{!hasSearched}}">
+    <view class="section-title">🔥 热门搜索</view>
+    <view class="hot-tags">
+      <text class="hot-tag" wx:for="{{hotKeywords}}" wx:key="*this" bindtap="quickSearch" data-keyword="{{item}}">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view class="search-history" wx:if="{{!hasSearched && history.length > 0}}">
+    <view class="history-header">
+      <view class="section-title">🕐 搜索历史</view>
+      <text class="clear-history" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="history-tags">
+      <text class="history-tag" wx:for="{{history}}" wx:key="*this" bindtap="quickSearch" data-keyword="{{item}}">{{item}}</text>
+    </view>
+  </view>
+</view>

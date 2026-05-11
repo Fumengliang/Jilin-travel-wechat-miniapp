@@ -1,0 +1,73 @@
+<view class="blindbox-container">
+  <!-- 顶部横幅 -->
+  <view class="blindbox-hero">
+    <view class="hero-content">
+      <text class="hero-emoji">🎁</text>
+      <text class="hero-title">惊喜盲盒</text>
+      <text class="hero-subtitle">低价好物，探索未知的美味与惊喜</text>
+    </view>
+  </view>
+
+  <!-- 盲盒分类 -->
+  <view class="blindbox-categories">
+    <scroll-view scroll-x class="category-scroll" show-scrollbar="{{false}}">
+      <view class="category-item {{currentCategory === 'all' ? 'active' : ''}}" bindtap="setCategory" data-category="all">
+        <text class="cat-icon">✨</text>
+        <text class="cat-name">全部</text>
+      </view>
+      <view class="category-item {{currentCategory === 'accessory' ? 'active' : ''}}" bindtap="setCategory" data-category="accessory">
+        <text class="cat-icon">💍</text>
+        <text class="cat-name">饰品</text>
+      </view>
+      <view class="category-item {{currentCategory === 'food' ? 'active' : ''}}" bindtap="setCategory" data-category="food">
+        <text class="cat-icon">🍜</text>
+        <text class="cat-name">美食</text>
+      </view>
+      <view class="category-item {{currentCategory === 'craft' ? 'active' : ''}}" bindtap="setCategory" data-category="craft">
+        <text class="cat-icon">🎨</text>
+        <text class="cat-name">非遗</text>
+      </view>
+      <view class="category-item {{currentCategory === 'ticket' ? 'active' : ''}}" bindtap="setCategory" data-category="ticket">
+        <text class="cat-icon">🎫</text>
+        <text class="cat-name">门票</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 盲盒列表 -->
+  <view class="blindbox-list">
+    <view class="blindbox-card" wx:for="{{blindboxes}}" wx:key="id">
+      <view class="blindbox-image-wrap">
+        <image class="blindbox-image" src="{{item.cover}}" mode="aspectFill" lazy-load/>
+        <view class="blindbox-tag">{{item.categoryName}}</view>
+      </view>
+      <view class="blindbox-content">
+        <text class="blindbox-name">{{item.name}}</text>
+        <text class="blindbox-desc">{{item.desc}}</text>
+        <view class="blindbox-items">
+          <text class="item-tag" wx:for="{{item.items}}" wx:for-item="sub" wx:key="*this">{{sub}}</text>
+        </view>
+        <view class="blindbox-footer">
+          <view class="blindbox-price">
+            <text class="price-symbol">¥</text>
+            <text class="price-num">{{item.price}}</text>
+            <text class="price-original">¥{{item.originalPrice}}</text>
+          </view>
+          <button class="btn-buy" size="mini" bindtap="buyBlindbox" data-id="{{item.id}}">
+            立即抢购
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部说明 -->
+  <view class="blindbox-notice">
+    <text class="notice-title">🛡️ 透明消费保障</text>
+    <view class="notice-list">
+      <text class="notice-item">✓ 明码标价，无隐性消费</text>
+      <text class="notice-item">✓ 人工+AI双重审核评价</text>
+      <text class="notice-item">✓ 专属赔付基金兜底</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,48 @@
+<view class="routes-container">
+  <!-- 顶部筛选 -->
+  <view class="filter-bar">
+    <scroll-view scroll-x class="filter-scroll" show-scrollbar="{{false}}">
+      <view class="filter-item {{currentFilter === 'all' ? 'active' : ''}}" bindtap="setFilter" data-filter="all">全部</view>
+      <view class="filter-item {{currentFilter === 'nature' ? 'active' : ''}}" bindtap="setFilter" data-filter="nature">自然风光</view>
+      <view class="filter-item {{currentFilter === 'culture' ? 'active' : ''}}" bindtap="setFilter" data-filter="culture">人文历史</view>
+      <view class="filter-item {{currentFilter === 'food' ? 'active' : ''}}" bindtap="setFilter" data-filter="food">美食探店</view>
+      <view class="filter-item {{currentFilter === 'city' ? 'active' : ''}}" bindtap="setFilter" data-filter="city">城市漫步</view>
+      <view class="filter-item {{currentFilter === 'winter' ? 'active' : ''}}" bindtap="setFilter" data-filter="winter">冰雪主题</view>
+    </scroll-view>
+  </view>
+
+  <!-- 路线列表 -->
+  <view class="routes-list">
+    <view class="route-card" wx:for="{{routes}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="route-image-wrap">
+        <image class="route-image" src="{{item.cover}}" mode="aspectFill" lazy-load/>
+        <view class="route-badge">{{item.duration}}</view>
+        <view class="route-overlay">
+          <text class="route-theme">{{item.theme}}</text>
+        </view>
+      </view>
+      <view class="route-content">
+        <text class="route-title">{{item.name}}</text>
+        <text class="route-desc ellipsis-2">{{item.desc}}</text>
+        <view class="route-highlights">
+          <text class="highlight" wx:for="{{item.highlights}}" wx:for-item="h" wx:key="*this">✓ {{h}}</text>
+        </view>
+        <view class="route-footer">
+          <view class="route-stats">
+            <text class="stat">📸 出片率{{item.photoRate}}%</text>
+            <text class="stat">🍜 {{item.foodCount}}+美食</text>
+          </view>
+          <view class="route-action">
+            <!-- <text class="route-price">{{item.price > 0 ? '¥' + item.price + '起' : '免费'}}</text> -->
+            <button class="btn-mini">查看详情</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{routes.length > 0}}">
+    <text>{{hasMore ? '加载中...' : '已经到底啦~'}}</text>
+  </view>
+</view>

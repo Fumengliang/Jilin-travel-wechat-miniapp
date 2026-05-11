@@ -1,0 +1,221 @@
+/* 惊喜盒页面 */
+.blindbox-container {
+  min-height: 100vh;
+  background: var(--bg);
+  padding-bottom: 40rpx;
+}
+
+/* 顶部横幅 */
+.blindbox-hero {
+  background: linear-gradient(135deg, #1a5f2a, #2d8a3e);
+  padding: 60rpx 40rpx;
+  text-align: center;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-emoji {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.hero-title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 12rpx;
+}
+
+.hero-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.8);
+}
+
+/* 分类栏 */
+.blindbox-categories {
+  background: #fff;
+  padding: 24rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.category-scroll {
+  white-space: nowrap;
+  padding: 0 20rpx;
+}
+
+.category-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 32rpx;
+  margin-right: 16rpx;
+  border-radius: 20rpx;
+  background: #f5f5f5;
+  transition: all 0.3s;
+}
+
+.category-item.active {
+  background: var(--primary);
+}
+
+.cat-icon {
+  font-size: 40rpx;
+  margin-bottom: 8rpx;
+}
+
+.cat-name {
+  font-size: 24rpx;
+  color: var(--text);
+}
+
+.category-item.active .cat-name {
+  color: #fff;
+}
+
+/* 盲盒卡片 */
+.blindbox-list {
+  padding: 0 20rpx;
+}
+
+.blindbox-card {
+  background: #fff;
+  border-radius: 20rpx;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
+}
+
+.blindbox-image-wrap {
+  position: relative;
+  height: 300rpx;
+}
+
+.blindbox-image {
+  width: 100%;
+  height: 100%;
+}
+
+.blindbox-tag {
+  position: absolute;
+  top: 20rpx;
+  left: 20rpx;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+}
+
+.blindbox-content {
+  padding: 24rpx;
+}
+
+.blindbox-name {
+  display: block;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: var(--text);
+  margin-bottom: 12rpx;
+}
+
+.blindbox-desc {
+  display: block;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-bottom: 16rpx;
+  line-height: 1.5;
+}
+
+.blindbox-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.item-tag {
+  font-size: 22rpx;
+  color: var(--primary);
+  background: rgba(26,95,42,0.08);
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.blindbox-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--border);
+}
+
+.blindbox-price {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+}
+
+.price-symbol {
+  font-size: 28rpx;
+  color: var(--danger);
+  font-weight: bold;
+}
+
+.price-num {
+  font-size: 44rpx;
+  color: var(--danger);
+  font-weight: bold;
+}
+
+.price-original {
+  font-size: 26rpx;
+  color: var(--text-light);
+  text-decoration: line-through;
+  margin-left: 12rpx;
+}
+
+.btn-buy {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e53) !important;
+  color: #fff !important;
+  font-size: 28rpx !important;
+  padding: 16rpx 40rpx !important;
+  border-radius: 32rpx !important;
+  margin: 0 !important;
+}
+
+.btn-buy::after {
+  border: none !important;
+}
+
+/* 底部说明 */
+.blindbox-notice {
+  margin: 20rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+}
+
+.notice-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--text);
+  margin-bottom: 20rpx;
+}
+
+.notice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.notice-item {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}

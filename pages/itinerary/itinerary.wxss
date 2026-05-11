@@ -1,0 +1,244 @@
+/* 行程页 */
+.itinerary-container {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 20rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 60rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text);
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  display: block;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-bottom: 40rpx;
+}
+
+/* 控制面板 */
+.control-panel {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+}
+
+.control-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.control-desc {
+  display: block;
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+/* 行程卡片 */
+.itinerary-card {
+  margin-bottom: 24rpx;
+}
+
+.iti-header {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid var(--border);
+}
+
+.iti-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+
+.iti-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.iti-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.iti-meta {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.iti-status {
+  display: inline-block;
+  padding: 6rpx 16rpx;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+  width: fit-content;
+}
+
+.iti-status.planned {
+  background: rgba(26,95,42,0.1);
+  color: var(--primary);
+}
+
+.iti-status.ongoing {
+  background: rgba(232,185,35,0.15);
+  color: #b8860b;
+}
+
+.iti-status.completed {
+  background: rgba(7,193,96,0.1);
+  color: var(--success);
+}
+
+.iti-delete {
+  font-size: 32rpx;
+  padding: 10rpx;
+  color: var(--text-light);
+}
+
+/* 行程节点 */
+.iti-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.iti-node {
+  background: #fafafa;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  border-left: 6rpx solid var(--primary);
+}
+
+.iti-node.skipped {
+  border-left-color: var(--text-light);
+  opacity: 0.6;
+}
+
+.iti-node.postponed {
+  border-left-color: var(--accent);
+}
+
+.node-day-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.day-label {
+  background: var(--primary);
+  color: #fff;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  font-weight: bold;
+  margin-right: 16rpx;
+}
+
+.day-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.node-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.action-btn {
+  font-size: 24rpx !important;
+  padding: 8rpx 20rpx !important;
+  border-radius: 20rpx !important;
+  margin: 0 !important;
+}
+
+.action-btn.postpone {
+  background: rgba(232,185,35,0.15) !important;
+  color: #b8860b !important;
+}
+
+.action-btn.postpone::after {
+  border: none;
+}
+
+.action-btn.skip {
+  background: rgba(100,100,100,0.08) !important;
+  color: var(--text-secondary) !important;
+}
+
+.action-btn.skip::after {
+  border: none;
+}
+
+.node-spots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.spot-tag {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  background: #fff;
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+/* AI重规划 */
+.ai-replan {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 20rpx;
+  padding: 16rpx;
+  background: rgba(26,95,42,0.05);
+  border-radius: 16rpx;
+}
+
+.ai-icon {
+  font-size: 40rpx;
+}
+
+.ai-text {
+  flex: 1;
+}
+
+.ai-text text {
+  display: block;
+  font-size: 28rpx;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.ai-sub {
+  font-size: 24rpx !important;
+  color: var(--text-secondary) !important;
+  font-weight: normal !important;
+}

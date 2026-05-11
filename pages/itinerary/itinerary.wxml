@@ -1,0 +1,64 @@
+<view class="itinerary-container">
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{itinerary.length === 0}}">
+    <view class="empty-icon">🗺️</view>
+    <text class="empty-title">还没有行程哦</text>
+    <text class="empty-desc">去精品路线挑选心仪的旅程吧</text>
+    <button class="btn-primary" bindtap="goToRoutes">去发现路线</button>
+  </view>
+
+  <!-- 行程列表 -->
+  <view class="itinerary-list" wx:if="{{itinerary.length > 0}}">
+    <!-- 行程控制面板 -->
+    <view class="control-panel card">
+      <view class="control-title">⚡ 行程智能控制面板</view>
+      <text class="control-desc">点击节点可操作：推迟、跳过、重新规划</text>
+    </view>
+
+    <view class="itinerary-card card" wx:for="{{itinerary}}" wx:key="id">
+      <view class="iti-header">
+        <image class="iti-img" src="{{item.cover}}" mode="aspectFill"/>
+        <view class="iti-info">
+          <text class="iti-name">{{item.name}}</text>
+          <text class="iti-meta">{{item.duration}} · {{item.theme}}</text>
+          <view class="iti-status {{item.status}}">
+            <text>{{statusText[item.status]}}</text>
+          </view>
+        </view>
+        <text class="iti-delete" bindtap="deleteItinerary" data-index="{{index}}">🗑️</text>
+      </view>
+
+      <!-- 行程节点 -->
+      <view class="iti-nodes">
+        <view class="iti-node {{node.status}}" wx:for="{{item.schedule}}" wx:for-item="day" wx:key="dayNum">
+          <view class="node-day-header">
+            <text class="day-label">Day {{day.dayNum}}</text>
+            <text class="day-title">{{day.title}}</text>
+          </view>
+          <view class="node-actions">
+            <button class="action-btn postpone" size="mini" bindtap="postponeDay" data-iti="{{item.id}}" data-day="{{day.dayNum}}">
+              ⏰ 推迟
+            </button>
+            <button class="action-btn skip" size="mini" bindtap="skipDay" data-iti="{{item.id}}" data-day="{{day.dayNum}}">
+              ⏭️ 跳过
+            </button>
+          </view>
+          <view class="node-spots">
+            <text class="spot-tag" wx:for="{{day.nodes}}" wx:for-item="node" wx:key="time">
+              {{node.name}}
+            </text>
+          </view>
+        </view>
+      </view>
+
+      <!-- AI重规划提示 -->
+      <view class="ai-replan" wx:if="{{item.hasChanges}}">
+        <view class="ai-icon">🤖</view>
+        <view class="ai-text">
+          <text>AI 已重新规划路线</text>
+          <text class="ai-sub">根据您的调整优化了后续行程</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

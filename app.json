@@ -1,0 +1,67 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/search/search",
+    "pages/routes/routes",
+    "pages/route-detail/route-detail",
+    "pages/itinerary/itinerary",
+    "pages/blindbox/blindbox",
+    "pages/transparency/transparency",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1a5f2a",
+    "navigationBarTitleText": "吉林私旅管家",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1a5f2a",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/routes/routes",
+        "text": "路线",
+        "iconPath": "images/route.png",
+        "selectedIconPath": "images/route-active.png"
+      },
+      {
+        "pagePath": "pages/itinerary/itinerary",
+        "text": "行程",
+        "iconPath": "images/plan.png",
+        "selectedIconPath": "images/plan-active.png"
+      },
+      {
+        "pagePath": "pages/blindbox/blindbox",
+        "text": "盲盒",
+        "iconPath": "images/box.png",
+        "selectedIconPath": "images/box-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user-active.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "sitemapLocation": "sitemap.json"
+}
