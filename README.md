@@ -96,7 +96,7 @@ jilin-travel-miniapp/
 ## 📱 快速启动
 1. 用**微信开发者工具**导入项目
 2. 配置 AppID
-3. 在微信公众平台将https://ark.cn-beijing.volces.com设置在request里
+3. 在微信公众平台将  https://ark.cn-beijing.volces.com    设置在request里
 
 ---
 
